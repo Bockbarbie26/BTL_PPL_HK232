@@ -39,6 +39,7 @@ expression5 : NOT expression5 | expression6;
 expression6 : (ADD | SUB) expression6 | expression7;
 expression7 : expression7 index_operator | expression8 ;
 expression8 : ID | literal | LPAREN expression RPAREN | function;
+index_operator	 :  expression LBRACKET expression RBRACKET;
 //TODO Value
 literal: NUMBER_LIT | STRING_LIT | TRUE | FALSE | array_literal;
 array_literal: LPAREN list_literal? RPAREN;
@@ -51,7 +52,8 @@ statement: declaration_statement | assignment_statement
             | break_statement | continue_statement 
             | return_statement  | call_statement | block_statement;
 declaration_statement: variables ignore;
-assignment_statement : literal ID ASSIGNINIT expression ignore;
+assignment_statement : lhs ASSIGNINIT expression ignore;
+lhs 				 : ID | array_literal;
 if_statement		 : IF LPAREN expression RPAREN statement (elif_statement)* (else_statement)? ;
 elif_statement		 : ELIF LPAREN expression RPAREN statement;
 else_statement		 : ELSE statement;
@@ -60,7 +62,7 @@ break_statement		 : ignore? BREAK;
 continue_statement	 : ignore? CONTINUE;
 return_statement 	 : RETURN expression?;
 call_statement	 	 : function;
-block_statement		 : 'begin' ignore (statement_list)* ignore 'end';
+block_statement		 : 'begin' ignore statement_list ignore 'end' ignore;
 // kí tự bỏ qua
 ignore: (COMMENTS | NEWLINE)+;
 //! --------------------------  Lexical structure ----------------------- //
@@ -106,7 +108,6 @@ GREATER_THAN 	 : 	'>';
 GREATER_OR_EQUAL : 	'>=';
 CONCAT 		     : 	'...';
 EQUAL 			 : 	'==';
-index_operator: ;
 
 // TODO Separators
 LBRACKET: '[';

@@ -1,4 +1,4 @@
-# Generated from d:/studying/HK232/PPL/BTL_PhanTien/btl1_updated/BTL1 UPDATE 25-1/initial/src/main/zcode/parser/ZCode.g4 by ANTLR 4.13.1
+# Generated from d:/studying/BTL_PPL_HK232/src/main/zcode/parser/ZCode.g4 by ANTLR 4.13.1
 from antlr4 import *
 from io import StringIO
 import sys
