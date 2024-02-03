@@ -1,3 +1,7 @@
+//
+// Ho va ten: Tran Trong Bach
+// MSSV : 2112847
+//
 grammar ZCode;
 
 @lexer::header {
@@ -25,8 +29,8 @@ list_NUMBER_LIT : NUMBER_LIT COMMA list_NUMBER_LIT | NUMBER_LIT;
 
 
 //TODO declared function
-function: FUNC ID LPAREN prameters_list? RPAREN  (ignore? return_statement | ignore? block_statement | ignore);
-prameters_list : list_expr | ;
+function: FUNC ID LPAREN parameters_list? RPAREN  (ignore? return_statement | ignore? block_statement | ignore);
+parameters_list : list_expr | ;
 
 //TODO Expression
 list_expr   : expression COMMA list_expr | expression;
@@ -37,8 +41,7 @@ expression3 : expression3 (ADD | SUB) expression4 | expression4;
 expression4 : expression4 (MUL | DIV | MODUL) expression5 | expression5;
 expression5 : NOT expression5 | expression6;
 expression6 : (ADD | SUB) expression6 | expression7;
-expression7 : (ID | funcall) LBRACKET list_expr RBRACKET | expression8 ;
-expression8 : ID | literal | LPAREN expression RPAREN | funcall;
+expression7 : (ID | funcall) LBRACKET list_expr RBRACKET | ID | literal | LPAREN expression RPAREN | funcall;
 funcall		: ID LPAREN list_expr RPAREN;
 
 //TODO Value
@@ -58,14 +61,14 @@ if_statement		 : IF LPAREN expression RPAREN statement (elif_statement)* (else_s
 elif_statement		 : ELIF LPAREN expression RPAREN statement;
 else_statement		 : ELSE statement;
 for_statement		 : FOR ID UNTIL expression BY expression ignore? statement;
-break_statement		 : ignore? BREAK;
-continue_statement	 : ignore? CONTINUE;
-return_statement 	 : RETURN expression?;
-call_statement	 	 : funcall;
+break_statement		 : BREAK ignore;
+continue_statement	 : CONTINUE ignore;
+return_statement 	 : RETURN (list_expr)? ignore;
+call_statement	 	 : funcall ignore;
 block_statement		 : BEGIN ignore statement_list END ignore;
 // kí tự bỏ qua
 ignore: (COMMENTS | NEWLINE)+;
-//! --------------------------  Lexical structure ----------------------- //
+
 // TODO KeyWord
 TRUE    :   'true';
 FALSE   :   'false';
