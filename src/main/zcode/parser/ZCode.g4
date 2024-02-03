@@ -14,7 +14,7 @@ options {
 // declared 
 program: NEWLINE* list_declared EOF;
 list_declared:  declared list_declared |  declared;
-declared: funct | variables ignore;
+declared: function | variables ignore;
 
 //TODO declared variable
 variables       : implicit_var | implicit_dynamic | keyword_var; 
@@ -25,26 +25,26 @@ list_NUMBER_LIT : NUMBER_LIT COMMA list_NUMBER_LIT | NUMBER_LIT;
 
 
 //TODO declared function
-funct: FUNC ID LPAREN prameters_list? RPAREN  (ignore? return_statement | ignore? block_statement | ignore);
+functionx: FUNC ID LPAREN prameters_list? RPAREN  (ignore? return_statement | ignore? block_statement | ignore);
 prameters_list : list_expr | ;
 
 //TODO Expression
 list_expr   : expression COMMA list_expr | expression;
 expression  : expression1 CONCAT expression1 | expression1;
-expression1 : expression1 (ASSIGN | EQUAL | NOT_EQUAL | LESS_THAN | GREATER_THAN | LESS_OR_EQUAL | GREATER_OR_EQUAL) expression1 
-			| expression2;
+expression1 : expression1 (ASSIGN | EQUAL | NOT_EQUAL | LESS_THAN | GREATER_THAN | LESS_OR_EQUAL | GREATER_OR_EQUAL) expression1 | expression2;
 expression2 : expression2 (AND | OR) expression3 | expression3;
 expression3 : expression3 (ADD | SUB) expression4 | expression4;
 expression4 : expression4 (MUL | DIV | MODUL) expression5 | expression5;
 expression5 : NOT expression5 | expression6;
 expression6 : (ADD | SUB) expression6 | expression7;
-expression7 : expression7 index_operator | expression8 ;
-expression8 : ID | literal | LPAREN expression RPAREN | funct;
-index_operator	 :  expression LBRACKET expression RBRACKET;
+expression7 : (ID | funcall) LBRACKET list_expr RBRACKET | expression8 ;
+expression8 : ID | literal | LPAREN expression RPAREN | funcall;
+index_operator	 :  expression LBRACKET list_NUMBER_LIT RBRACKET;
+
 //TODO Value
 literal: NUMBER_LIT | STRING_LIT | TRUE | FALSE | array_literal;
-array_literal: LPAREN list_literal? RPAREN;
-list_literal :expression COMMA list_literal | expression;
+array_literal: LBRACKET list_literal? RBRACKET;
+list_literal : literal COMMA list_literal | literal;
 
 //TODO  Statements
 statement_list: statement statement_list | ; 
@@ -63,7 +63,7 @@ break_statement		 : ignore? BREAK;
 continue_statement	 : ignore? CONTINUE;
 return_statement 	 : RETURN expression?;
 call_statement	 	 : funct;
-block_statement		 : 'begin' ignore statement_list ignore 'end' ignore;
+block_statement		 : BEGIN ignore statement_list END ignore;
 // kí tự bỏ qua
 ignore: (COMMENTS | NEWLINE)+;
 //! --------------------------  Lexical structure ----------------------- //
