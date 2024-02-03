@@ -146,7 +146,7 @@ UNCLOSE_STRING: '"' (~[\r\n\f\\'"] | '\\' [bfrnt'\\] | '\'"')* (EOF | '\r\n' | '
 		elif(self.text[-1] == '\n'):
 			raise UncloseString(self.text[1:-1])
 		else:
-			raise UncloseString(slef.text[1:])
+			raise UncloseString(self.text[1:])
 	};
 ILLEGAL_ESCAPE: '"' (~[\r\n\f\\'"] | '\\' [bfrnt'\\] | '\'"')* ([\r\f'] | '\\' ~[bfrnt'\\] | '\'' ~["]) 
 	{raise IllegalEscape(self.text[1:]);};

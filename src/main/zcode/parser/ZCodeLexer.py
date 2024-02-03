@@ -334,7 +334,7 @@ class ZCodeLexer(Lexer):
             		elif(self.text[-1] == '\n'):
             			raise UncloseString(self.text[1:-1])
             		else:
-            			raise UncloseString(slef.text[1:])
+            			raise UncloseString(self.text[1:])
             	
      
 
