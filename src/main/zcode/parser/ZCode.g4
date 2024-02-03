@@ -20,7 +20,7 @@ declared: function | variables ignore;
 variables       : implicit_var | implicit_dynamic | keyword_var; 
 implicit_var    : VAR ID ASSIGNINIT expression;
 implicit_dynamic: DYNAMIC ID (ASSIGNINIT expression)?;
-keyword_var     : ((BOOL | NUMBER | STRING) ID (ASSIGNINIT expression)?) | 'array' ID LBRACKET list_NUMBER_LIT RBRACKET ASSIGNINIT expression;
+keyword_var     : (BOOL | NUMBER | STRING) ID (LBRACKET list_NUMBER_LIT RBRACKET)? (ASSIGNINIT expression)?;
 list_NUMBER_LIT : NUMBER_LIT COMMA list_NUMBER_LIT | NUMBER_LIT;
 
 
