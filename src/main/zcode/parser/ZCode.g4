@@ -25,7 +25,7 @@ list_NUMBER_LIT : NUMBER_LIT COMMA list_NUMBER_LIT | NUMBER_LIT;
 
 
 //TODO declared function
-functionx: FUNC ID LPAREN prameters_list? RPAREN  (ignore? return_statement | ignore? block_statement | ignore);
+function: FUNC ID LPAREN prameters_list? RPAREN  (ignore? return_statement | ignore? block_statement | ignore);
 prameters_list : list_expr | ;
 
 //TODO Expression
@@ -39,12 +39,11 @@ expression5 : NOT expression5 | expression6;
 expression6 : (ADD | SUB) expression6 | expression7;
 expression7 : (ID | funcall) LBRACKET list_expr RBRACKET | expression8 ;
 expression8 : ID | literal | LPAREN expression RPAREN | funcall;
-index_operator	 :  expression LBRACKET list_NUMBER_LIT RBRACKET;
+funcall		: ID LPAREN list_expr RPAREN;
 
 //TODO Value
 literal: NUMBER_LIT | STRING_LIT | TRUE | FALSE | array_literal;
-array_literal: LBRACKET list_literal? RBRACKET;
-list_literal : literal COMMA list_literal | literal;
+array_literal: LBRACKET list_expr RBRACKET;
 
 //TODO  Statements
 statement_list: statement statement_list | ; 
@@ -62,7 +61,7 @@ for_statement		 : FOR ID UNTIL expression BY expression ignore? statement;
 break_statement		 : ignore? BREAK;
 continue_statement	 : ignore? CONTINUE;
 return_statement 	 : RETURN expression?;
-call_statement	 	 : funct;
+call_statement	 	 : funcall;
 block_statement		 : BEGIN ignore statement_list END ignore;
 // kí tự bỏ qua
 ignore: (COMMENTS | NEWLINE)+;
