@@ -31,7 +31,8 @@ prameters_list : list_expr | ;
 //TODO Expression
 list_expr   : expression COMMA list_expr | expression;
 expression  : expression1 CONCAT expression1 | expression1;
-expression1 : expression1 (ASSIGN | EQUAL | NOT_EQUAL | LESS_THAN | GREATER_THAN | LESS_OR_EQUAL | GREATER_OR_EQUAL) expression1 | expression2;
+expression1 : expression1 (ASSIGN | EQUAL | NOT_EQUAL | LESS_THAN | GREATER_THAN | LESS_OR_EQUAL | GREATER_OR_EQUAL) expression1 
+			| expression2;
 expression2 : expression2 (AND | OR) expression3 | expression3;
 expression3 : expression3 (ADD | SUB) expression4 | expression4;
 expression4 : expression4 (MUL | DIV | MODUL) expression5 | expression5;
