@@ -179,7 +179,7 @@ class ZCodeParser ( Parser ):
     RULE_implicit_dynamic = 5
     RULE_keyword_var = 6
     RULE_list_NUMBER_LIT = 7
-    RULE_function = 8
+    RULE_funct = 8
     RULE_prameters_list = 9
     RULE_list_expr = 10
     RULE_expression = 11
@@ -213,7 +213,7 @@ class ZCodeParser ( Parser ):
 
     ruleNames =  [ "program", "list_declared", "declared", "variables", 
                    "implicit_var", "implicit_dynamic", "keyword_var", "list_NUMBER_LIT", 
-                   "function", "prameters_list", "list_expr", "expression", 
+                   "funct", "prameters_list", "list_expr", "expression", 
                    "expression1", "expression2", "expression3", "expression4", 
                    "expression5", "expression6", "expression7", "expression8", 
                    "index_operator", "literal", "array_literal", "list_literal", 
@@ -405,8 +405,8 @@ class ZCodeParser ( Parser ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
-        def function(self):
-            return self.getTypedRuleContext(ZCodeParser.FunctionContext,0)
+        def funct(self):
+            return self.getTypedRuleContext(ZCodeParser.FunctContext,0)
 
 
         def variables(self):
@@ -434,7 +434,7 @@ class ZCodeParser ( Parser ):
             if token in [10]:
                 self.enterOuterAlt(localctx, 1)
                 self.state = 93
-                self.function()
+                self.funct()
                 pass
             elif token in [1, 4, 5, 6, 8, 9]:
                 self.enterOuterAlt(localctx, 2)
@@ -779,7 +779,7 @@ class ZCodeParser ( Parser ):
         return localctx
 
 
-    class FunctionContext(ParserRuleContext):
+    class FunctContext(ParserRuleContext):
         __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
@@ -815,15 +815,15 @@ class ZCodeParser ( Parser ):
 
 
         def getRuleIndex(self):
-            return ZCodeParser.RULE_function
+            return ZCodeParser.RULE_funct
 
 
 
 
-    def function(self):
+    def funct(self):
 
-        localctx = ZCodeParser.FunctionContext(self, self._ctx, self.state)
-        self.enterRule(localctx, 16, self.RULE_function)
+        localctx = ZCodeParser.FunctContext(self, self._ctx, self.state)
+        self.enterRule(localctx, 16, self.RULE_funct)
         self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
@@ -1579,8 +1579,8 @@ class ZCodeParser ( Parser ):
         def RPAREN(self):
             return self.getToken(ZCodeParser.RPAREN, 0)
 
-        def function(self):
-            return self.getTypedRuleContext(ZCodeParser.FunctionContext,0)
+        def funct(self):
+            return self.getTypedRuleContext(ZCodeParser.FunctContext,0)
 
 
         def getRuleIndex(self):
@@ -1622,7 +1622,7 @@ class ZCodeParser ( Parser ):
             elif la_ == 4:
                 self.enterOuterAlt(localctx, 4)
                 self.state = 243
-                self.function()
+                self.funct()
                 pass
 
 
@@ -2581,8 +2581,8 @@ class ZCodeParser ( Parser ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
-        def function(self):
-            return self.getTypedRuleContext(ZCodeParser.FunctionContext,0)
+        def funct(self):
+            return self.getTypedRuleContext(ZCodeParser.FunctContext,0)
 
 
         def getRuleIndex(self):
@@ -2598,7 +2598,7 @@ class ZCodeParser ( Parser ):
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 348
-            self.function()
+            self.funct()
         except RecognitionException as re:
             localctx.exception = re
             self._errHandler.reportError(self, re)

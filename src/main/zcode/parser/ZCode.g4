@@ -14,7 +14,7 @@ options {
 // declared 
 program: NEWLINE* list_declared EOF;
 list_declared:  declared list_declared |  declared;
-declared: function | variables ignore;
+declared: funct | variables ignore;
 
 //TODO declared variable
 variables       : implicit_var | implicit_dynamic | keyword_var; 
@@ -25,7 +25,7 @@ list_NUMBER_LIT : NUMBER_LIT COMMA list_NUMBER_LIT | NUMBER_LIT;
 
 
 //TODO declared function
-function: FUNC ID LPAREN prameters_list? RPAREN  (ignore? return_statement | ignore? block_statement | ignore);
+funct: FUNC ID LPAREN prameters_list? RPAREN  (ignore? return_statement | ignore? block_statement | ignore);
 prameters_list : list_expr | ;
 
 //TODO Expression
@@ -38,7 +38,7 @@ expression4 : expression4 (MUL | DIV | MODUL) expression5 | expression5;
 expression5 : NOT expression5 | expression6;
 expression6 : (ADD | SUB) expression6 | expression7;
 expression7 : expression7 index_operator | expression8 ;
-expression8 : ID | literal | LPAREN expression RPAREN | function;
+expression8 : ID | literal | LPAREN expression RPAREN | funct;
 index_operator	 :  expression LBRACKET expression RBRACKET;
 //TODO Value
 literal: NUMBER_LIT | STRING_LIT | TRUE | FALSE | array_literal;
@@ -61,7 +61,7 @@ for_statement		 : FOR ID UNTIL expression BY expression ignore? statement;
 break_statement		 : ignore? BREAK;
 continue_statement	 : ignore? CONTINUE;
 return_statement 	 : RETURN expression?;
-call_statement	 	 : function;
+call_statement	 	 : funct;
 block_statement		 : 'begin' ignore statement_list ignore 'end' ignore;
 // kí tự bỏ qua
 ignore: (COMMENTS | NEWLINE)+;
@@ -125,7 +125,7 @@ ID: [a-zA-Z_][a-zA-Z0-9_]*;
 NUMBER_LIT		:	INT ('.' INT*)? EXP?;
 fragment INT	:	[0-9]+;
 fragment EXP 	:	([eE] [-+]? [0-9]+);
-STRING_LIT		:	'"' ~[\r\n\f\\'"] | '\\' [bfrnt'\\] | '\'"' {self.text = self.text[1:-1];};
+STRING_LIT		:	'"' (~[\r\n\\"] | '\\' [bfrnt'\\] | '\'"')* '"' {self.text = self.text[1:-1]};
 BOOLEAN_LIT		:	TRUE|FALSE;
 
 // NEWLINE COMMENTS WS
@@ -133,13 +133,13 @@ BOOLEAN_LIT		:	TRUE|FALSE;
 //! vì ngôn ngữ này COMMENTS chỉ 1 hàng không chung với mấy biểu thức khác nên bắt để xử lí thứ tự các bước sau
 //! COMMENTS lên lớp nghe thử thầy nói gì không nha vì này nén lỗi phần lexer cũng được mà nhưng thứ tự ngữ pháp và ở phần tiếp theo -> này tùy thầy thôi
 NEWLINE: [\n]; // 
-COMMENTS: '##' ~[\n\r\f]* -> skip; // Comments
+COMMENTS: '##' ~[\n\r]* -> skip; // Comments
 WS : [ \t\r\f\b]+ -> skip ; // skip spaces, tabs
 
 // TODO ERROR
 //! hiện thực  UNCLOSE_STRING và ILLEGAL_ESCAPE code antlr và python tận dụng lại ý tưởng STRING_LIT
 ERROR_CHAR: . {raise ErrorToken(self.text)};
-UNCLOSE_STRING: '"' (~[\r\n\f\\'"] | '\\' [bfrnt'\\] | '\'"')* (EOF | '\r\n' | '\n')
+UNCLOSE_STRING: '"' (~[\r\n\\"] | '\\' [bfrnt'\\] | '\'"')* (EOF | '\r\n' | '\n')
 	{
 		if(len(self.text) >= 2 and self.text[-1] == '\n' and self.text[-2] == '\r'):
 			raise UncloseString(self.text[1:-2])
@@ -148,6 +148,6 @@ UNCLOSE_STRING: '"' (~[\r\n\f\\'"] | '\\' [bfrnt'\\] | '\'"')* (EOF | '\r\n' | '
 		else:
 			raise UncloseString(self.text[1:])
 	};
-ILLEGAL_ESCAPE: '"' (~[\r\n\f\\'"] | '\\' [bfrnt'\\] | '\'"')* ([\r\f'] | '\\' ~[bfrnt'\\] | '\'' ~["]) 
-	{raise IllegalEscape(self.text[1:]);};
+ILLEGAL_ESCAPE: '"' (~[\r\n\\"] | '\\' [bfrnt'\\] | '\'"')* ([\r] | '\\' ~[bfrnt'\\]) 
+	{raise IllegalEscape(self.text[1:])};
 //!  -------------------------- end Lexical structure ------------------- //

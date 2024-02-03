@@ -123,7 +123,7 @@ implicit_var
 implicit_dynamic
 keyword_var
 list_NUMBER_LIT
-function
+funct
 prameters_list
 list_expr
 expression
