@@ -13,14 +13,14 @@ options {
 }
 
 
-// //! --------------------------  Lexical structure ----------------------- //
+//  --------------------------  begin ----------------------- //
 
 // declared 
 program: NEWLINE* list_declared EOF;
 list_declared:  declared list_declared |  declared;
 declared: function | variables ignore;
 
-//TODO declared variable
+// Declared variable
 variables       : implicit_var | implicit_dynamic | keyword_var; 
 implicit_var    : VAR ID ASSIGNINIT expression;
 implicit_dynamic: DYNAMIC ID (ASSIGNINIT expression)?;
@@ -28,11 +28,11 @@ keyword_var     : (BOOL | NUMBER | STRING) ID (LBRACKET list_NUMBER_LIT RBRACKET
 list_NUMBER_LIT : NUMBER_LIT COMMA list_NUMBER_LIT | NUMBER_LIT;
 
 
-//TODO declared function
+// Declared function
 function: FUNC ID LPAREN parameters_list? RPAREN  (ignore? return_statement | ignore? block_statement | ignore);
 parameters_list : list_expr | ;
 
-//TODO Expression
+// Expression
 list_expr   : expression COMMA list_expr | expression;
 expression  : expression1 CONCAT expression1 | expression1;
 expression1 : expression1 (ASSIGN | EQUAL | NOT_EQUAL | LESS_THAN | GREATER_THAN | LESS_OR_EQUAL | GREATER_OR_EQUAL) expression1 | expression2;
@@ -44,11 +44,11 @@ expression6 : (ADD | SUB) expression6 | expression7;
 expression7 : (ID | funcall) LBRACKET list_expr RBRACKET | ID | literal | LPAREN expression RPAREN | funcall;
 funcall		: ID LPAREN list_expr RPAREN;
 
-//TODO Value
+// Value
 literal: NUMBER_LIT | STRING_LIT | TRUE | FALSE | array_literal;
 array_literal: LBRACKET list_expr RBRACKET;
 
-//TODO  Statements
+// Statements
 statement_list: statement statement_list | ; 
 statement: declaration_statement | assignment_statement 
             | if_statement | for_statement 
@@ -66,10 +66,10 @@ continue_statement	 : CONTINUE ignore;
 return_statement 	 : RETURN (list_expr)? ignore;
 call_statement	 	 : funcall ignore;
 block_statement		 : BEGIN ignore statement_list END ignore;
-// kí tự bỏ qua
-ignore: (COMMENTS | NEWLINE)+;
 
-// TODO KeyWord
+ignore: (COMMENTS | NEWLINE)+; // ignore
+
+// KeyWord
 TRUE    :   'true';
 FALSE   :   'false';
 NUMBER	: 	'number';
@@ -93,7 +93,7 @@ NOT		:	'not';
 AND		:	'and';
 OR 		:	'or';
 
-// TODO Operators
+// Operators
 ASSIGNINIT: '<-';
 ADD		: 	'+';
 SUB		:	'-';
@@ -112,7 +112,7 @@ GREATER_OR_EQUAL : 	'>=';
 CONCAT 		     : 	'...';
 EQUAL 			 : 	'==';
 
-// TODO Separators
+// Separators
 LBRACKET: '[';
 RBRACKET: ']';
 LPAREN  : '(';
@@ -120,27 +120,21 @@ RPAREN  : ')';
 COMMA   : ',';
 
 
-// TODO Identifiers
+//Identifiers
 ID: [a-zA-Z_][a-zA-Z0-9_]*;
 
-// TODO Literal 
-//! STRING_LIT nhớ dùng python bỏ đi " " đầu và cuối
+//Literal 
 NUMBER_LIT		:	INT ('.' INT*)? EXP?;
 fragment INT	:	[0-9]+;
 fragment EXP 	:	([eE] [-+]? [0-9]+);
 STRING_LIT		:	'"' (~[\r\n\\"] | '\\' [bfrnt'\\] | '\'"')* '"' {self.text = self.text[1:-1]};
 BOOLEAN_LIT		:	TRUE|FALSE;
 
-// NEWLINE COMMENTS WS
-//! vì NEWLINE là kí tự kết thúc giống với ';' trong C nên lấy để xử lí bước sau
-//! vì ngôn ngữ này COMMENTS chỉ 1 hàng không chung với mấy biểu thức khác nên bắt để xử lí thứ tự các bước sau
-//! COMMENTS lên lớp nghe thử thầy nói gì không nha vì này nén lỗi phần lexer cũng được mà nhưng thứ tự ngữ pháp và ở phần tiếp theo -> này tùy thầy thôi
-NEWLINE: [\n]; // 
+NEWLINE: [\n]; 					 // 
 COMMENTS: '##' ~[\n\r]* -> skip; // Comments
-WS : [ \t\r\f\b]+ -> skip ; // skip spaces, tabs
+WS : [ \t\r\f\b]+ -> skip ; 	 // Spaces, tabs
 
-// TODO ERROR
-//! hiện thực  UNCLOSE_STRING và ILLEGAL_ESCAPE code antlr và python tận dụng lại ý tưởng STRING_LIT
+//ERROR
 ERROR_CHAR: . {raise ErrorToken(self.text)};
 UNCLOSE_STRING: '"' (~[\r\n\\"] | '\\' [bfrnt'\\] | '\'"')* (EOF | '\r\n' | '\n')
 	{
@@ -153,4 +147,4 @@ UNCLOSE_STRING: '"' (~[\r\n\\"] | '\\' [bfrnt'\\] | '\'"')* (EOF | '\r\n' | '\n'
 	};
 ILLEGAL_ESCAPE: '"' (~[\r\n\\"] | '\\' [bfrnt'\\] | '\'"')* ([\r] | '\\' ~[bfrnt'\\]) 
 	{raise IllegalEscape(self.text[1:])};
-//!  -------------------------- end Lexical structure ------------------- //
+//  -------------------------- end ------------------- //
