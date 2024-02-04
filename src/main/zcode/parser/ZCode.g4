@@ -35,14 +35,14 @@ parameters_list : list_expr | ;
 // Expression
 list_expr   : expression COMMA list_expr | expression;
 expression  : expression1 CONCAT expression1 | expression1;
-expression1 : expression1 (ASSIGN | EQUAL | NOT_EQUAL | LESS_THAN | GREATER_THAN | LESS_OR_EQUAL | GREATER_OR_EQUAL) expression1 | expression2;
+expression1 : expression2 (ASSIGN | EQUAL | NOT_EQUAL | LESS_THAN | GREATER_THAN | LESS_OR_EQUAL | GREATER_OR_EQUAL) expression2 | expression2;
 expression2 : expression2 (AND | OR) expression3 | expression3;
 expression3 : expression3 (ADD | SUB) expression4 | expression4;
 expression4 : expression4 (MUL | DIV | MODUL) expression5 | expression5;
 expression5 : NOT expression5 | expression6;
 expression6 : (ADD | SUB) expression6 | expression7;
 expression7 : (ID | funcall) LBRACKET list_expr RBRACKET | ID | literal | LPAREN expression RPAREN | funcall;
-funcall		: ID LPAREN list_expr RPAREN;
+funcall		: ID LPAREN list_expr? RPAREN;
 
 // Value
 literal: NUMBER_LIT | STRING_LIT | TRUE | FALSE | array_literal;
@@ -57,7 +57,7 @@ statement: declaration_statement | assignment_statement
 declaration_statement: variables ignore;
 assignment_statement : lhs ASSIGNINIT expression ignore;
 lhs 				 : ID | array_literal;
-if_statement		 : IF LPAREN expression RPAREN statement (elif_statement)* (else_statement)? ;
+if_statement		 : IF LPAREN expression RPAREN statement (elif_statement)? (else_statement)? ;
 elif_statement		 : ELIF LPAREN expression RPAREN statement;
 else_statement		 : ELSE statement;
 for_statement		 : FOR ID UNTIL expression BY expression ignore? statement;
