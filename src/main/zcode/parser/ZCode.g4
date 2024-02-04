@@ -29,7 +29,7 @@ list_NUMBER_LIT : NUMBER_LIT COMMA list_NUMBER_LIT | NUMBER_LIT;
 
 
 // Declared function
-function: FUNC ID LPAREN parameters_list? RPAREN  (ignore? return_statement | ignore? block_statement | ignore);
+function: FUNC ID LPAREN parameters_list RPAREN  (ignore? return_statement | ignore? block_statement | ignore);
 parameters_list : list_expr | ;
 
 // Expression
